@@ -1,13 +1,16 @@
 package br.com.cinetracker.principal;
 
+import br.com.cinetracker.models.EpisodeData;
 import br.com.cinetracker.models.SeasonData;
 import br.com.cinetracker.models.SeriesData;
 import br.com.cinetracker.services.ApiService;
 import br.com.cinetracker.services.DataConverter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     //https://www.omdbapi.com/?t=gilmore+girls&season=" + i + "&apikey=a997b1d7
@@ -37,5 +40,19 @@ public class Principal {
         }
 
         seasons.forEach(System.out::println);
+
+        seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
+
+
+        List<EpisodeData> episodes = seasons.stream()
+                .flatMap(s -> s.episodes().stream())
+                .collect(Collectors.toList());
+
+        System.out.println("\nTop 5: ");
+        episodes.stream()
+                .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
+                .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
+                .limit(5)
+                .forEach(System.out::println);
     }
 }

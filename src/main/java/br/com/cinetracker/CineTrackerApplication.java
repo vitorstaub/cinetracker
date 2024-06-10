@@ -26,8 +26,5 @@ public class CineTrackerApplication implements CommandLineRunner {
 		Principal principal = new Principal();
 		principal.showMenu();
 
-//		seasons.stream()
-//				.filter(season -> season.seasonNumber() % 2 == 0)
-//				.forEach(System.out::println);
 	}
 }
