@@ -1,5 +1,6 @@
 package br.com.cinetracker.principal;
 
+import br.com.cinetracker.models.Episode;
 import br.com.cinetracker.models.EpisodeData;
 import br.com.cinetracker.models.SeasonData;
 import br.com.cinetracker.models.SeriesData;
@@ -13,8 +14,6 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Principal {
-    //https://www.omdbapi.com/?t=gilmore+girls&season=" + i + "&apikey=a997b1d7
-
     private final String DEFAULT_ADDRESS = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=a997b1d7";
 
@@ -29,7 +28,6 @@ public class Principal {
         var json = api.getData(DEFAULT_ADDRESS + seriesName + API_KEY);
 
         SeriesData data = converter.getData(json, SeriesData.class);
-        System.out.println(data);
 
         List<SeasonData> seasons = new ArrayList<>();
 
@@ -39,20 +37,24 @@ public class Principal {
             seasons.add(seasonData);
         }
 
-        seasons.forEach(System.out::println);
-
         seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
 
-
-        List<EpisodeData> episodes = seasons.stream()
+        List<EpisodeData> episodeData = seasons.stream()
                 .flatMap(s -> s.episodes().stream())
                 .collect(Collectors.toList());
 
         System.out.println("\nTop 5: ");
-        episodes.stream()
+        episodeData.stream()
                 .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
                 .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
                 .limit(5)
                 .forEach(System.out::println);
+
+        List<Episode> episodes = seasons.stream()
+                .flatMap(s -> s.episodes().stream()
+                        .map(d -> new Episode(s.seasonNumber(), d))
+                ).toList();
+
+        episodes.forEach(System.out::println);
     }
 }
