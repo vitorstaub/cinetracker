@@ -13,48 +13,77 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import ch.qos.logback.core.encoder.JsonEscapeUtil;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.beans.factory.annotation.Value;
+
 public class Principal {
     private final String DEFAULT_ADDRESS = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=a997b1d7";
 
-    private ApiService api = new ApiService();
-    private Scanner scanner = new Scanner(System.in);
-    private DataConverter converter = new DataConverter();
+    private final Dotenv dotenv = Dotenv.load();
+    private final String API_KEY = dotenv.get("API_KEY");
+
+    private final ApiService api = new ApiService();
+    private final Scanner scanner = new Scanner(System.in);
+    private final DataConverter converter = new DataConverter();
 
     public void showMenu() {
         System.out.println("Enter series name");
         var seriesName = scanner.nextLine().replace(" ", "+").toLowerCase();
 
-        var json = api.getData(DEFAULT_ADDRESS + seriesName + API_KEY);
+        var json = api.getData(DEFAULT_ADDRESS + seriesName + "&apikey=" + API_KEY);
 
         SeriesData data = converter.getData(json, SeriesData.class);
+        System.out.println(data);
 
         List<SeasonData> seasons = new ArrayList<>();
 
         for (int i = 1; i <= data.totalSeasons(); i++) {
-            json = api.getData(DEFAULT_ADDRESS + seriesName + "&season=" + i + API_KEY);
+            json = api.getData(DEFAULT_ADDRESS + seriesName + "&season=" + i + "&apikey=" + API_KEY);
             SeasonData seasonData = converter.getData(json, SeasonData.class);
             seasons.add(seasonData);
         }
 
-        seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
-
         List<EpisodeData> episodeData = seasons.stream()
                 .flatMap(s -> s.episodes().stream())
                 .collect(Collectors.toList());
-
-        System.out.println("\nTop 5: ");
-        episodeData.stream()
-                .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
-                .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
-                .limit(5)
-                .forEach(System.out::println);
 
         List<Episode> episodes = seasons.stream()
                 .flatMap(s -> s.episodes().stream()
                         .map(d -> new Episode(s.seasonNumber(), d))
                 ).toList();
 
-        episodes.forEach(System.out::println);
+        while (true) {
+            System.out.println("\nOptions: \n [0] Exit \n [1] Show all episodes names \n [2] Top 5 episodes \n [3] All episodes info");
+            int choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 0:
+                    break;
+                case 1:
+                    seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
+                    break;
+                case 2:
+                    System.out.println("\nTop 5: ");
+                    episodeData.stream()
+                            .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
+                            .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
+                            .limit(5)
+                            .forEach(System.out::println);
+                    break;
+                case 3:
+                    episodes.forEach(System.out::println);
+                    break;
+            }
+            if (choice == 0) {
+                break;
+            }
+
+        }
+
+
+
+
+
+
     }
 }
