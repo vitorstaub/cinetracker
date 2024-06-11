@@ -7,15 +7,15 @@ import br.com.cinetracker.models.SeriesData;
 import br.com.cinetracker.services.ApiService;
 import br.com.cinetracker.services.DataConverter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-import ch.qos.logback.core.encoder.JsonEscapeUtil;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.beans.factory.annotation.Value;
+
 
 public class Principal {
     private final String DEFAULT_ADDRESS = "https://www.omdbapi.com/?t=";
@@ -46,7 +46,7 @@ public class Principal {
 
         List<EpisodeData> episodeData = seasons.stream()
                 .flatMap(s -> s.episodes().stream())
-                .collect(Collectors.toList());
+                .toList();
 
         List<Episode> episodes = seasons.stream()
                 .flatMap(s -> s.episodes().stream()
@@ -54,7 +54,8 @@ public class Principal {
                 ).toList();
 
         while (true) {
-            System.out.println("\nOptions: \n [0] Exit \n [1] Show all episodes names \n [2] Top 5 episodes \n [3] All episodes info");
+            System.out.println("\nOptions: \n [0] Exit \n [1] Show all episodes names \n [2] Top 5 episodes \n [3] All episodes info \n [4] " +
+                    "Choose episodes from a year onwards\n");
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
                 switch (choice) {
@@ -73,6 +74,23 @@ public class Principal {
                         break;
                     case 3:
                         episodes.forEach(System.out::println);
+                        break;
+                    case 4:
+                        System.out.println("Choose a year onwards: ");
+                        var year = scanner.nextInt();
+                        scanner.nextLine();
+
+                        LocalDate searchDate = LocalDate.of(year, 1, 1);
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                        episodes.stream()
+                                .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
+                                .forEach(e -> System.out.println(
+                                        "Season: " + e.getSeason() +
+                                        " Episode: " + e.getEpisodeNumber() +
+                                        " Released: " + e.getReleaseDate().format(formatter)
+                                ));
                         break;
                 }
                 if (choice == 0) {
