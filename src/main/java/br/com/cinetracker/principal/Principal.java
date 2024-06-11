@@ -55,35 +55,32 @@ public class Principal {
 
         while (true) {
             System.out.println("\nOptions: \n [0] Exit \n [1] Show all episodes names \n [2] Top 5 episodes \n [3] All episodes info");
-            int choice = Integer.parseInt(scanner.nextLine());
-            switch (choice) {
-                case 0:
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+                switch (choice) {
+                    case 0:
+                        break;
+                    case 1:
+                        seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
+                        break;
+                    case 2:
+                        System.out.println("\nTop 5: ");
+                        episodeData.stream()
+                                .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
+                                .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
+                                .limit(5)
+                                .forEach(System.out::println);
+                        break;
+                    case 3:
+                        episodes.forEach(System.out::println);
+                        break;
+                }
+                if (choice == 0) {
                     break;
-                case 1:
-                    seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
-                    break;
-                case 2:
-                    System.out.println("\nTop 5: ");
-                    episodeData.stream()
-                            .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
-                            .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
-                            .limit(5)
-                            .forEach(System.out::println);
-                    break;
-                case 3:
-                    episodes.forEach(System.out::println);
-                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number");
             }
-            if (choice == 0) {
-                break;
-            }
-
         }
-
-
-
-
-
-
     }
 }
