@@ -33,72 +33,75 @@ public class Principal {
 
         var json = api.getData(DEFAULT_ADDRESS + seriesName + "&apikey=" + API_KEY);
 
-        SeriesData data = converter.getData(json, SeriesData.class);
-        System.out.println(data);
+        try {
+            SeriesData data = converter.convertData(json, SeriesData.class);
+            System.out.println(data);
 
-        List<SeasonData> seasons = new ArrayList<>();
+            List<SeasonData> seasons = new ArrayList<>();
 
-        for (int i = 1; i <= data.totalSeasons(); i++) {
-            json = api.getData(DEFAULT_ADDRESS + seriesName + "&season=" + i + "&apikey=" + API_KEY);
-            SeasonData seasonData = converter.getData(json, SeasonData.class);
-            seasons.add(seasonData);
-        }
-
-        List<EpisodeData> episodeData = seasons.stream()
-                .flatMap(s -> s.episodes().stream())
-                .toList();
-
-        List<Episode> episodes = seasons.stream()
-                .flatMap(s -> s.episodes().stream()
-                        .map(d -> new Episode(s.seasonNumber(), d))
-                ).toList();
-
-        while (true) {
-            System.out.println("\nOptions: \n [0] Exit \n [1] Show all episodes names \n [2] Top 5 episodes \n [3] All episodes info \n [4] " +
-                    "Choose episodes from a year onwards\n");
-            try {
-                int choice = Integer.parseInt(scanner.nextLine());
-                switch (choice) {
-                    case 0:
-                        break;
-                    case 1:
-                        seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
-                        break;
-                    case 2:
-                        System.out.println("\nTop 5: ");
-                        episodeData.stream()
-                                .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
-                                .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
-                                .limit(5)
-                                .forEach(System.out::println);
-                        break;
-                    case 3:
-                        episodes.forEach(System.out::println);
-                        break;
-                    case 4:
-                        System.out.println("Choose a year onwards: ");
-                        var year = scanner.nextInt();
-                        scanner.nextLine();
-
-                        LocalDate searchDate = LocalDate.of(year, 1, 1);
-
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                        episodes.stream()
-                                .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
-                                .forEach(e -> System.out.println(
-                                        "Season: " + e.getSeason() +
-                                        " Episode: " + e.getEpisodeNumber() +
-                                        " Released: " + e.getReleaseDate().format(formatter)
-                                ));
-                        break;
-                }
-                if (choice == 0) {
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid number");
+            for (int i = 1; i <= data.totalSeasons(); i++) {
+                json = api.getData(DEFAULT_ADDRESS + seriesName + "&season=" + i + "&apikey=" + API_KEY);
+                SeasonData seasonData = converter.convertData(json, SeasonData.class);
+                seasons.add(seasonData);
             }
+
+            List<EpisodeData> episodeData = seasons.stream()
+                    .flatMap(s -> s.episodes().stream())
+                    .toList();
+
+            List<Episode> episodes = seasons.stream()
+                    .flatMap(s -> s.episodes().stream()
+                            .map(d -> new Episode(s.seasonNumber(), d))
+                    ).toList();
+            while (true) {
+                System.out.println("\nOptions: \n [0] Exit \n [1] Show all episodes names \n [2] Top 5 episodes \n [3] All episodes info \n [4] " +
+                        "Choose episodes from a year onwards\n");
+                try {
+                    int choice = Integer.parseInt(scanner.nextLine());
+                    switch (choice) {
+                        case 0:
+                            break;
+                        case 1:
+                            seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
+                            break;
+                        case 2:
+                            System.out.println("\nTop 5: ");
+                            episodeData.stream()
+                                    .filter(e -> !e.episodeRating().equalsIgnoreCase("N/A"))
+                                    .sorted(Comparator.comparing(EpisodeData::episodeRating).reversed())
+                                    .limit(5)
+                                    .forEach(System.out::println);
+                            break;
+                        case 3:
+                            episodes.forEach(System.out::println);
+                            break;
+                        case 4:
+                            System.out.println("Choose a year onwards: ");
+                            var year = scanner.nextInt();
+                            scanner.nextLine();
+
+                            LocalDate searchDate = LocalDate.of(year, 1, 1);
+
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                            episodes.stream()
+                                    .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
+                                    .forEach(e -> System.out.println(
+                                            "Season: " + e.getSeason() +
+                                                    " Episode: " + e.getEpisodeNumber() +
+                                                    " Released: " + e.getReleaseDate().format(formatter)
+                                    ));
+                            break;
+                    }
+                    if (choice == 0) {
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number");
+                }
+            }
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
