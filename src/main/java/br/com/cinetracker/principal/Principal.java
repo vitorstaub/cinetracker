@@ -10,6 +10,7 @@ import br.com.cinetracker.services.DataConverter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -57,7 +58,8 @@ public class Principal {
                         "\n [2] Top 5 episodes " +
                         "\n [3] All episodes info " +
                         "\n [4] Choose episodes from a year onwards" +
-                        "\n [5] Search a episode");
+                        "\n [5] Search a episode " +
+                        "\n [6] Average per season");
                 try {
                     int choice = Integer.parseInt(scanner.nextLine());
                     switch (choice) {
@@ -90,8 +92,8 @@ public class Principal {
                                     .filter(e -> e.getReleaseDate() != null && e.getReleaseDate().isAfter(searchDate))
                                     .forEach(e -> System.out.println(
                                             "Season: " + e.getSeason() +
-                                                    " Episode: " + e.getEpisodeNumber() +
-                                                    " Released: " + e.getReleaseDate().format(formatter)
+                                            " Episode: " + e.getEpisodeNumber() +
+                                            " Released: " + e.getReleaseDate().format(formatter)
                                     ));
                             break;
                         case 5:
@@ -104,6 +106,13 @@ public class Principal {
                             episodes.stream()
                                     .filter(e -> e.getTitle().toLowerCase().contains(search.toLowerCase()))
                                     .forEach(System.out::println);
+                            break;
+                        case 6:
+                            Map<Integer, Double> ratingPerSeason = episodes.stream()
+                                    .filter(e -> e.getEpisodeRating() > 0.0)
+                                    .collect(Collectors.groupingBy(Episode::getSeason,
+                                            Collectors.averagingDouble(Episode::getEpisodeRating)));
+                            System.out.println(ratingPerSeason);
                             break;
                     }
                     if (choice == 0) {
