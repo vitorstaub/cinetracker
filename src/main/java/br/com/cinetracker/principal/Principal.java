@@ -59,7 +59,8 @@ public class Principal {
                         "\n [3] All episodes info " +
                         "\n [4] Choose episodes from a year onwards" +
                         "\n [5] Search a episode " +
-                        "\n [6] Average per season");
+                        "\n [6] Average per season " +
+                        "\n [7] General statistics");
                 try {
                     int choice = Integer.parseInt(scanner.nextLine());
                     switch (choice) {
@@ -113,6 +114,15 @@ public class Principal {
                                     .collect(Collectors.groupingBy(Episode::getSeason,
                                             Collectors.averagingDouble(Episode::getEpisodeRating)));
                             System.out.println(ratingPerSeason);
+                            break;
+                        case 7:
+                            DoubleSummaryStatistics est = episodes.stream()
+                                    .filter(e -> e.getEpisodeRating() > 0.0)
+                                    .collect(Collectors.summarizingDouble(Episode::getEpisodeRating));
+                            System.out.println("Number of episodes: " + est.getCount() +
+                                                "\nAverage rating " + est.getAverage() +
+                                                "\nMax rating episode " + est.getMax() +
+                                                "\nMin rating episode " + est.getMin());
                             break;
                     }
                     if (choice == 0) {
