@@ -9,10 +9,7 @@ import br.com.cinetracker.services.DataConverter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -54,8 +51,13 @@ public class Principal {
                             .map(d -> new Episode(s.seasonNumber(), d))
                     ).toList();
             while (true) {
-                System.out.println("\nOptions: \n [0] Exit \n [1] Show all episodes names \n [2] Top 5 episodes \n [3] All episodes info \n [4] " +
-                        "Choose episodes from a year onwards\n");
+                System.out.println("\nOptions: " +
+                        "\n [0] Exit " +
+                        "\n [1] Show all episodes names " +
+                        "\n [2] Top 5 episodes " +
+                        "\n [3] All episodes info " +
+                        "\n [4] Choose episodes from a year onwards" +
+                        "\n [5] Search a episode");
                 try {
                     int choice = Integer.parseInt(scanner.nextLine());
                     switch (choice) {
@@ -91,6 +93,17 @@ public class Principal {
                                                     " Episode: " + e.getEpisodeNumber() +
                                                     " Released: " + e.getReleaseDate().format(formatter)
                                     ));
+                            break;
+                        case 5:
+                            System.out.println("Search a episode: ");
+                            var search = scanner.nextLine();
+//                            Optional<Episode> searched = episodes.stream()
+//                                    .filter(e -> e.getTitle().toLowerCase().contains(search.toLowerCase()))
+//                                    .findFirst();
+//                            System.out.println(searched);
+                            episodes.stream()
+                                    .filter(e -> e.getTitle().toLowerCase().contains(search.toLowerCase()))
+                                    .forEach(System.out::println);
                             break;
                     }
                     if (choice == 0) {
