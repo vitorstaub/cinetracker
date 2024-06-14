@@ -28,21 +28,28 @@ public class Principal {
                 "\n [2] Show all episodes names " +
                 "\n [0] Exit ");
 
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (choice) {
-            case 1:
-                searchSeries();
-                break;
-            case 2:
-                searchEpisodeBySeries();
-                break;
-            case 0:
-                break;
-            default:
-                System.out.println("Invalid choice");
+            switch (choice) {
+                case 1:
+                    searchSeries();
+                    break;
+                case 2:
+                    searchEpisodeBySeries();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     private SeriesData getDataSeries() {
