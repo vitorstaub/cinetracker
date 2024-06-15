@@ -20,36 +20,45 @@ public class Principal {
     private final Scanner scanner = new Scanner(System.in);
     private final DataConverter converter = new DataConverter();
 
+    private List<SeriesData> seriessData = new ArrayList<>();
+
     public void showMenu() {
-        System.out.println("Enter series name");
+        var choice = -1;
+        while (choice != 0) {
+            System.out.println("Enter series name");
 
-        System.out.println("\nOptions: " +
-                "\n [1] Search Series " +
-                "\n [2] Show all episodes names " +
-                "\n [0] Exit ");
+            System.out.println("\nOptions: " +
+                    "\n [1] Search Series " +
+                    "\n [2] Show all episodes names " +
+                    "\n [3] List searched series" +
+                    "\n [0] Exit ");
 
-        try {
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (choice) {
-                case 1:
-                    searchSeries();
-                    break;
-                case 2:
-                    searchEpisodeBySeries();
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Invalid choice");
+                switch (choice) {
+                    case 1:
+                        searchSeries();
+                        break;
+                    case 2:
+                        searchEpisodeBySeries();
+                        break;
+                    case 3:
+                        listSearchedSeries();
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        System.out.println("Invalid choice");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(e.getMessage());
+            } catch (RuntimeException e) {
+                System.out.println("Unknown Error" + e.getMessage());
+                break;
             }
-        } catch (InputMismatchException e) {
-            System.out.println(e.getMessage());
-        } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
         }
-
     }
 
     private SeriesData getDataSeries() {
@@ -61,6 +70,7 @@ public class Principal {
 
     private void searchSeries() {
         SeriesData data = getDataSeries();
+        seriessData.add(data);
         System.out.println(data);
     }
 
@@ -74,5 +84,9 @@ public class Principal {
             seasons.add(seasonData);
         }
         seasons.forEach(System.out::println);
+    }
+
+    private void listSearchedSeries() {
+        seriessData.forEach(System.out::println);
     }
 }
