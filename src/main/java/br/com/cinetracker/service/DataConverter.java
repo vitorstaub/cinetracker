@@ -1,4 +1,4 @@
-package br.com.cinetracker.services;
+package br.com.cinetracker.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

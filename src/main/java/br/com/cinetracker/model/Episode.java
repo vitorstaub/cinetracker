@@ -1,4 +1,4 @@
-package br.com.cinetracker.models;
+package br.com.cinetracker.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

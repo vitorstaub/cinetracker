@@ -1,4 +1,4 @@
-package br.com.cinetracker.services;
+package br.com.cinetracker.service;
 
 import java.io.IOException;
 import java.net.URI;

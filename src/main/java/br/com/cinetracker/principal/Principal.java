@@ -1,9 +1,9 @@
 package br.com.cinetracker.principal;
 
-import br.com.cinetracker.models.SeasonData;
-import br.com.cinetracker.models.SeriesData;
-import br.com.cinetracker.services.ApiService;
-import br.com.cinetracker.services.DataConverter;
+import br.com.cinetracker.model.SeasonData;
+import br.com.cinetracker.model.SeriesData;
+import br.com.cinetracker.service.ApiService;
+import br.com.cinetracker.service.DataConverter;
 
 import java.util.*;
 

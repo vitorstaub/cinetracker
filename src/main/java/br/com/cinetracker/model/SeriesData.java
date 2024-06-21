@@ -1,4 +1,4 @@
-package br.com.cinetracker.models;
+package br.com.cinetracker.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
