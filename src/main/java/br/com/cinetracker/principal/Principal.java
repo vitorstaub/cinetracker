@@ -7,7 +7,6 @@ import br.com.cinetracker.service.ApiService;
 import br.com.cinetracker.service.DataConverter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
