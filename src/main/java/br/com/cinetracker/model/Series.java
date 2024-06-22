@@ -1,5 +1,6 @@
 package br.com.cinetracker.model;
 
+import br.com.cinetracker.service.GPTService;
 import com.fasterxml.jackson.annotation.JsonAlias;
 
 import java.util.OptionalDouble;
@@ -20,7 +21,7 @@ public class Series {
         this.genre = Category.fromString(d.genre().split(",")[0].strip());
         this.actors = d.actors();
         this.poster = d.poster();
-        this.plot = d.plot();
+        this.plot = GPTService.getTranslate(d.plot()).trim();
     }
 
     public String getTitle() {
