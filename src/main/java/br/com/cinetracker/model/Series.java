@@ -53,12 +53,12 @@ public class Series {
 
     @Override
     public String toString() {
-        return "title=" + title +
-                " totalSeasons=" + totalSeasons +
-                " rating=" + rating +
-                " genre=" + genre +
-                " actors=" + actors +
-                " poster=" + poster +
-                " plot=" + plot;
+        return "title= " + title +
+                " totalSeasons= " + totalSeasons +
+                " rating= " + rating +
+                " genre= " + genre +
+                " actors= " + actors +
+                " poster= " + poster +
+                " plot= " + plot;
     }
 }
