@@ -21,7 +21,7 @@ public class Series {
         this.genre = Category.fromString(d.genre().split(",")[0].strip());
         this.actors = d.actors();
         this.poster = d.poster();
-        this.plot = GPTService.getTranslate(d.plot()).trim();
+        this.plot = d.plot(); //GPTService.getTranslate(d.plot()).trim(); -- translate to portuguese --
     }
 
     public String getTitle() {
