@@ -22,9 +22,9 @@ public class Principal {
     private final Scanner scanner = new Scanner(System.in);
     private final DataConverter converter = new DataConverter();
 
-    private List<SeriesData> seriessData = new ArrayList<>();
+    private List<SeriesData> seriesData = new ArrayList<>();
 
-    private SeriesRepository repository;
+    private final SeriesRepository repository;
 
     public Principal(SeriesRepository repository) {
         this.repository = repository;
@@ -35,11 +35,17 @@ public class Principal {
         while (choice != 0) {
             System.out.println("Enter series name");
 
-            System.out.println("\nOptions: " +
-                    "\n [1] Search Series " +
-                    "\n [2] Show all episodes names " +
-                    "\n [3] List searched series" +
-                    "\n [0] Exit ");
+            System.out.println("""
+
+                    Options: \
+
+                     [1] Search Series \
+
+                     [2] Show all episodes names \
+
+                     [3] List searched series\
+
+                     [0] Exit\s""");
 
             try {
                 choice = scanner.nextInt();
@@ -80,7 +86,7 @@ public class Principal {
     private void searchSeries() {
         SeriesData data = getDataSeries();
         Series serie = new Series(data);
-        //seriessData.add(data);
+        //seriesData.add(data);
         repository.save(serie);
         System.out.println(data);
     }
@@ -100,7 +106,7 @@ public class Principal {
     private void listSearchedSeries() {
         List<Series> series;
 
-        series = seriessData.stream()
+        series = seriesData.stream()
                         .map(Series::new)
                         .toList();
 
