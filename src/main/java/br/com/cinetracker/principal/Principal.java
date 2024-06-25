@@ -54,9 +54,10 @@ public class Principal {
                         System.out.println("Invalid choice");
                 }
             } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Invalid Character " + e.getMessage());
+                break;
             } catch (RuntimeException e) {
-                System.out.println("Unknown Error" + e.getMessage());
+                System.out.println(e.getMessage());
                 break;
             }
         }
