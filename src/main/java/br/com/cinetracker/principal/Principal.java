@@ -1,5 +1,6 @@
 package br.com.cinetracker.principal;
 
+import br.com.cinetracker.Repository.SeriesRepository;
 import br.com.cinetracker.model.SeasonData;
 import br.com.cinetracker.model.Series;
 import br.com.cinetracker.model.SeriesData;
@@ -22,6 +23,12 @@ public class Principal {
     private final DataConverter converter = new DataConverter();
 
     private List<SeriesData> seriessData = new ArrayList<>();
+
+    private SeriesRepository repository;
+
+    public Principal(SeriesRepository repository) {
+        this.repository = repository;
+    }
 
     public void showMenu() {
         var choice = -1;
@@ -72,7 +79,9 @@ public class Principal {
 
     private void searchSeries() {
         SeriesData data = getDataSeries();
-        seriessData.add(data);
+        Series serie = new Series(data);
+        //seriessData.add(data);
+        repository.save(serie);
         System.out.println(data);
     }
 

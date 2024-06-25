@@ -2,6 +2,8 @@ package br.com.cinetracker.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
@@ -20,6 +22,9 @@ public class Series {
     private String actors;
     private String poster;
     private String plot;
+
+    @Transient
+    private List<Episode> episodes = new ArrayList<>();
 
     public Series(SeriesData d) {
         this.title = d.title();
