@@ -1,14 +1,21 @@
 package br.com.cinetracker.model;
 
-import br.com.cinetracker.service.GPTService;
-import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.*;
 
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "series")
 public class Series {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(unique = true)
     private String title;
     private Integer totalSeasons;
     private Double rating;
+    @Enumerated(EnumType.STRING)
     private Category genre;
     private String actors;
     private String poster;
@@ -22,6 +29,13 @@ public class Series {
         this.actors = d.actors();
         this.poster = d.poster();
         this.plot = d.plot(); //GPTService.getTranslate(d.plot()).trim(); -- translate to portuguese --
+    }
+
+    public Series() {
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -50,6 +64,38 @@ public class Series {
 
     public String getPlot() {
         return plot;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setTotalSeasons(Integer totalSeasons) {
+        this.totalSeasons = totalSeasons;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public void setGenre(Category genre) {
+        this.genre = genre;
+    }
+
+    public void setActors(String actors) {
+        this.actors = actors;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public void setPlot(String plot) {
+        this.plot = plot;
     }
 
     @Override
