@@ -1,6 +1,6 @@
 package br.com.cinetracker;
 
-import br.com.cinetracker.Repository.SeriesRepository;
+import br.com.cinetracker.repository.SeriesRepository;
 import br.com.cinetracker.principal.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
