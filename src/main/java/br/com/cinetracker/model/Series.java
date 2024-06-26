@@ -36,8 +36,7 @@ public class Series {
         this.plot = d.plot(); //GPTService.getTranslate(d.plot()).trim(); -- translate to portuguese --
     }
 
-    public Series() {
-    }
+    public Series() {}
 
     public long getId() {
         return id;

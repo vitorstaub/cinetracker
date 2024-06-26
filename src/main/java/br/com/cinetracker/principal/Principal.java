@@ -1,6 +1,6 @@
 package br.com.cinetracker.principal;
 
-import br.com.cinetracker.Repository.SeriesRepository;
+import br.com.cinetracker.repository.SeriesRepository;
 import br.com.cinetracker.model.SeasonData;
 import br.com.cinetracker.model.Series;
 import br.com.cinetracker.model.SeriesData;
@@ -104,11 +104,7 @@ public class Principal {
     }
 
     private void listSearchedSeries() {
-        List<Series> series;
-
-        series = seriesData.stream()
-                        .map(Series::new)
-                        .toList();
+        List<Series> series =repository.findAll();
 
         series.stream()
                 .sorted(Comparator.comparing(Series::getGenre))
