@@ -43,6 +43,7 @@ public class Series {
     }
 
     public void setEpisodes(List<Episode> episodes) {
+        episodes.forEach(e -> e.setSeries(this));
         this.episodes = episodes;
     }
 

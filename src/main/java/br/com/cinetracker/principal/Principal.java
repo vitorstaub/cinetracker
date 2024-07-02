@@ -43,7 +43,7 @@ public class Principal {
 
                      [1] Search Series \
 
-                     [2] Show all episodes names \
+                     [2] Search Episodes \
 
                      [3] List searched series\
 
