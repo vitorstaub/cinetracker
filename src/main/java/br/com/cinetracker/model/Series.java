@@ -23,7 +23,7 @@ public class Series {
     private String poster;
     private String plot;
 
-    @OneToMany(mappedBy = "series")
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
     private List<Episode> episodes = new ArrayList<>();
 
     public Series(SeriesData d) {

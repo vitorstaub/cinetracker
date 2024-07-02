@@ -37,7 +37,6 @@ public class Episode {
         } catch (DateTimeParseException e) {
             this.releaseDate = null;
         }
-
     }
 
     public Episode() {}
