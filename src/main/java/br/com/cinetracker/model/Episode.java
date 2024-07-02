@@ -1,14 +1,26 @@
 package br.com.cinetracker.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+@Entity
+@Table(name = "episodes")
 public class Episode {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private Integer season;
     private String title;
     private Integer episodeNumber;
     private Double episodeRating;
     private LocalDate releaseDate;
+
+    @ManyToOne
+    @JoinColumn(name = "series_id")
+    private Series series;
 
 
     public Episode(Integer season, EpisodeData d) {
@@ -26,6 +38,44 @@ public class Episode {
             this.releaseDate = null;
         }
 
+    }
+
+    public Episode() {}
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setSeason(Integer season) {
+        this.season = season;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setEpisodeNumber(Integer episodeNumber) {
+        this.episodeNumber = episodeNumber;
+    }
+
+    public void setEpisodeRating(Double episodeRating) {
+        this.episodeRating = episodeRating;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public Series getSeries() {
+        return series;
+    }
+
+    public void setSeries(Series series) {
+        this.series = series;
     }
 
     public Integer getSeason() {

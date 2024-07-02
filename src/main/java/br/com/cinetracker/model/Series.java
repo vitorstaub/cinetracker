@@ -23,7 +23,7 @@ public class Series {
     private String poster;
     private String plot;
 
-    @Transient
+    @OneToMany(mappedBy = "series")
     private List<Episode> episodes = new ArrayList<>();
 
     public Series(SeriesData d) {

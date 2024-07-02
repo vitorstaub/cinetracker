@@ -22,8 +22,6 @@ public class Principal {
     private final Scanner scanner = new Scanner(System.in);
     private final DataConverter converter = new DataConverter();
 
-    private List<SeriesData> seriesData = new ArrayList<>();
-
     private final SeriesRepository repository;
 
     public Principal(SeriesRepository repository) {
