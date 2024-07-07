@@ -9,7 +9,6 @@ import br.com.cinetracker.service.ApiService;
 import br.com.cinetracker.service.DataConverter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -41,11 +40,13 @@ public class Principal {
 
                     Options: \
 
-                     [1] Search Series \
+                     [1] Search series \
 
-                     [2] Search Episodes \
+                     [2] Search episodes \
 
                      [3] List searched series\
+                    
+                     [4] Search series by name\
 
                      [0] Exit\s""");
 
@@ -63,6 +64,8 @@ public class Principal {
                     case 3:
                         listSearchedSeries();
                         break;
+                    case 4:
+                        searchSeriesByName();
                     case 0:
                         break;
                     default:
@@ -98,9 +101,7 @@ public class Principal {
         System.out.println("Enter a series name: ");
         var seriesName = scanner.nextLine();
 
-        Optional<Series> serie = series.stream()
-                .filter(s -> s.getTitle().toLowerCase().contains(seriesName.toLowerCase()))
-                .findFirst();
+        Optional<Series> serie = repository.findByTitleContainingIgnoreCase(seriesName);
 
         if (serie.isPresent()) {
             var seriesFound = serie.get();
@@ -131,5 +132,17 @@ public class Principal {
         series.stream()
                 .sorted(Comparator.comparing(Series::getGenre))
                 .forEach(System.out::println);
+    }
+
+    private void searchSeriesByName() {
+        System.out.println("Enter a series name: ");
+        var seriesName = scanner.nextLine();
+        Optional<Series> seriesSearched = repository.findByTitleContainingIgnoreCase(seriesName);
+
+        if (seriesSearched.isPresent()) {
+            System.out.println(seriesSearched.get());
+        } else {
+            System.out.println("Not Found");
+        }
     }
 }
