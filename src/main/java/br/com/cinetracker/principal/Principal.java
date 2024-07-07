@@ -47,6 +47,8 @@ public class Principal {
                      [3] List searched series\
                     
                      [4] Search series by name\
+                    
+                     [5] Search series by actor\
 
                      [0] Exit\s""");
 
@@ -66,6 +68,10 @@ public class Principal {
                         break;
                     case 4:
                         searchSeriesByName();
+                        break;
+                    case 5:
+                        searchSeriesByActor();
+                        break;
                     case 0:
                         break;
                     default:
@@ -144,5 +150,17 @@ public class Principal {
         } else {
             System.out.println("Not Found");
         }
+    }
+
+    private void searchSeriesByActor() {
+        System.out.println("Enter the actor's name: ");
+        var actorName = scanner.nextLine();
+
+        System.out.println("Minimum Rating: ");
+        var minRating = scanner.nextDouble();
+
+        List<Series> seriesSearched = repository.findByActorsContainingIgnoreCaseAndRatingGreaterThanEqual(actorName, minRating);
+
+        seriesSearched.forEach(s -> System.out.println("Title: " + s.getTitle() + " Rating: " + s.getRating()));
     }
 }
